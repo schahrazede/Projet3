@@ -185,4 +185,22 @@ footer nav ul {
 	justify-content: flex-end;
 	margin: 2em
 }
+/* filttre */
+#Filtre {
+	display: flex;
+	justify-content: center;
+	gap: 20px;
+
+}
+#Filtre button{
+	margin-bottom: 20px;
+	border: 1px solid #1D6154;
+	 padding: 10px; 
+	border-radius: 25px;
+	font-size: 1.2em;
+	color: #1D6154;
+	font-family: 'Syne';
+	background-color: white;
+
+}
 
