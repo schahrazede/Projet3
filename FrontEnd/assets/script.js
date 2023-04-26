@@ -1,41 +1,33 @@
-alert("bonjour");
 
-/*
-1. Appeler le backend via l'url http://localhost:5678/api/works avec la function fetch()
-2. Parcourir le resultat de fetch() au format JSON
-    a/ Pour chaque element du json, créer des elements HTML pour construire l'HTML
-            <figure>
-                <img src="assets/images/abajour-tahina.png" alt="Abajour Tahina">
-                <figcaption>Abajour Tahina</figcaption>
-            </figure>
+//boolean true/false 
+import { ajoutListenersAvis, ajoutListenerEnvoyerAvis } from "./login.js";
 
-            document.createELement("figure")
-            let img = document.createELement("img") //il faudra lui assigner imageUrl
-            
-            const caption = document.createElement("figcaption")
-            caption.innerText = //il faudra lui assigner title
-    
-    b/ Ne pas oublier d'ajouter les element dynamiquement créer au document, a l'interieur de cette div
-    <div class="gallery">
-*/
 
-// document.querySelector(".gallery").appendChild() 
 let works = [];
-const fetchWork = async () => {
+const fetchWork = async (affiche) => {
+    console.log("fetch")
     await fetch("http://localhost:5678/api/works")
         .then((reponse) => reponse.json())
         .then((Promise) => {
             works = Promise;
-            console.log(works);
+
+            if (affiche) {
+                worksDisplay()
+            }
 
         });
+  // on appelle la fonction pour ajouter le listener au formulaire
+ajoutListenerEnvoyerAvis()      
 };
 
 const worksDisplay = async () => {
-    await fetchWork();
 
+    const divGallery = document.querySelector(".gallery");
+    divGallery.innerHTML = ''
+
+    console.log("affiche " + works.length)
     for (let i = 0; i < works.length; i++) {
-        const divGallery = document.querySelector(".gallery");
+
         const worksElement = document.createElement("figure");
         const imageElement = document.createElement("img");
         imageElement.src = works[i].imageUrl;
@@ -52,7 +44,8 @@ const worksDisplay = async () => {
 
 };
 
-worksDisplay();
+fetchWork(true);
+
 
 let categories = [];
 const fethcategory = async () => {
@@ -60,39 +53,128 @@ const fethcategory = async () => {
         .then((res) => res.json())
         .then((Promise) => {
             categories = Promise;
-             console.log(categories);
+            //console.log(categories);
 
         });
 };
 fethcategory();
 
 
-const Filtrees = document.querySelector("#objet");
+const ObjetsFiltree = document.querySelector("#objet");
+ObjetsFiltree.addEventListener("click", function () {
 
-Filtrees.addEventListener("click", function () {
-    const workFiltre = works.filter(work => work.name === 'Objet');
+    fetchWork(false)
+    const workFiltre = works.filter(function (work) {
+        return work.category.name === 'Objets'
+    });
     console.log(workFiltre);
+
+    works = workFiltre
+
+    worksDisplay()
+});
+
+const AppartFiltree = document.querySelector("#Appart");
+AppartFiltree.addEventListener("click", function () {
+
+    fetchWork(false)
+    const workFiltre = works.filter(function (work) {
+        return work.category.name === 'Appartements'
+    });
+    console.log(workFiltre);
+
+    works = workFiltre
+
+    worksDisplay()
+});
+const HotelFiltree = document.querySelector("#hot-res");
+HotelFiltree.addEventListener("click", function () {
+
+    fetchWork(false)
+    const workFiltre = works.filter(function (work) {
+        return work.category.name === 'Hotels & restaurants'
+    });
+    console.log(workFiltre);
+
+    works = workFiltre
+
+    worksDisplay()
+});
+
+const TousFiltree = document.querySelector("#all");
+TousFiltree.addEventListener("click", function () {
+    fetchWork(true)
 });
 
 // login/users
 
 // let Infos = [];
 // const GetInfo = async () => {
-//     await fetch("http://localhost:5678/api/users/login")
-//         .then((res) => res.json())
+//     /*await fetch("http://localhost:5678/api/users/login") //GET
+//         .then((res) => res.json()
 //         .then((token) => {
 //             Infos = token;
 //             const infoLogin = JSON.stringify(Infos);
 //              console.log(Infos);
 
-//         });
+//         });*/
+
+//     const data = {
+//        i
+//     };
+
+//     const response = await fetch("http://localhost:5678/api/users/login", {
+//         method: "POST", // *GET, POST, PUT, DELETE, etc.
+//         headers: {
+//             "Content-Type": "application/json",
+//         },
+//         body: JSON.stringify(data), // body data type must match "Content-Type" header
+//     })
+//     const formLogIn = document.querySelector(".LogIn-form");
+//     formLogIn.addEventListener("submit", function (event) {
+//         event.preventDefault();
+//         var email = document.getElementById("email").value;
+//         var password = document.getElementById("password").value;
+
+//     });
+//     if (email === body.email && password === body.password) {
+//         Window; Location = "index.html";
+
+//     }
+//     else {
+//         document.getElementById("error_msg").innerHTML = "erreur";
+//     }
+//     // return response.json();
 // };
 // GetInfo();
 
 
+/**
+ * ETAPE 2 Formulaire de login
+ * 
+ * 1. Créer la page HTML/CSS (Attention, pensez aux responsive)
+ * 2. Ajouter un eventListener sur le bouton "se connecter" au click
+ *    A. Verifier que les 2 champs du formulaire ne sont pas vide
+ *      b. si les champs sont vides, afficher un message d'erreur
+ *  
+ *    B. si les champs sont OK, envoyer une requete POST vers /api/users/login avec fetch()
+ *          avec les données du formulaires
+ * 
+ *    C. Si authentification OK (HTTP 200)
+ *         a. on récupère le token dans la reponse
+ *         b. ON sauvegarde le token
+ *          c. On redirige l'utilisateur vers la page d'accueil
+ *         d. sur la page d'accueil, si l'utilisateur est connecté, alors il faut afficher logout dans le header
+ *              a la palce de login
+ *          e. si click sur logout, on supprime le token (on deconnecte l'utilisateur)
+ * 
+ *      D. Si authentification NOK (HTTP 401 ou 404)
+ *          a. afficher un message d'erreur
+ * 
+ */
 
 
-
+ 
 
 
 
