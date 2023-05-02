@@ -1,7 +1,8 @@
 
 //boolean true/false 
-import { ajoutListenersAvis, ajoutListenerEnvoyerAvis } from "./login.js";
 
+
+document.getElementById('li_logout').style.display = 'none'
 
 let works = [];
 const fetchWork = async (affiche) => {
@@ -17,7 +18,7 @@ const fetchWork = async (affiche) => {
 
         });
   // on appelle la fonction pour ajouter le listener au formulaire
-ajoutListenerEnvoyerAvis()      
+      
 };
 
 const worksDisplay = async () => {
@@ -106,47 +107,7 @@ TousFiltree.addEventListener("click", function () {
     fetchWork(true)
 });
 
-// login/users
 
-// let Infos = [];
-// const GetInfo = async () => {
-//     /*await fetch("http://localhost:5678/api/users/login") //GET
-//         .then((res) => res.json()
-//         .then((token) => {
-//             Infos = token;
-//             const infoLogin = JSON.stringify(Infos);
-//              console.log(Infos);
-
-//         });*/
-
-//     const data = {
-//        i
-//     };
-
-//     const response = await fetch("http://localhost:5678/api/users/login", {
-//         method: "POST", // *GET, POST, PUT, DELETE, etc.
-//         headers: {
-//             "Content-Type": "application/json",
-//         },
-//         body: JSON.stringify(data), // body data type must match "Content-Type" header
-//     })
-//     const formLogIn = document.querySelector(".LogIn-form");
-//     formLogIn.addEventListener("submit", function (event) {
-//         event.preventDefault();
-//         var email = document.getElementById("email").value;
-//         var password = document.getElementById("password").value;
-
-//     });
-//     if (email === body.email && password === body.password) {
-//         Window; Location = "index.html";
-
-//     }
-//     else {
-//         document.getElementById("error_msg").innerHTML = "erreur";
-//     }
-//     // return response.json();
-// };
-// GetInfo();
 
 
 /**
@@ -173,11 +134,98 @@ TousFiltree.addEventListener("click", function () {
  * 
  */
 
+let token = localStorage.getItem('token')
+if(token !== null) {
 
+    document.getElementById('li_logout').style.display = 'block'
+    document.getElementById('li_login').style.display = 'none'
+
+}
  
+document.querySelector('#li_logout a').addEventListener('click', function(event) {
+    localStorage.removeItem('token');
+    window.location.href = 'index.html'
+});
 
 
+// ouverture de modale
+let modal = null
+const Openmodale = function(e){
+    e.preventDefault();
+    const target = document.querySelector(e.target.getAttribute('href'));
+    target.style.display = null;
+    target.removeAttribute('aria_hiddden')
+    target.setAttribute('aria-modal', 'true')
+    modal = target 
+    const fermer = document.querySelector(".X-close")
+    fermer.addEventListener('click', closeModale)
+   
+    modal.querySelector(".modale-supprimer-btn").addEventListener('click', closeModale)
+    // modal.querySelector(".Stop-modale").addEventListener('click', stopPropagation)
 
+};
+// POUR FERMER LA MODALE
+const closeModale = function(e) {
+    if (modal === null) return
+    e.preventDefault();
+    const focus = document.querySelector('html');
+    focus.style.background = "white";
+    modal.style.display = "none";
+    modal.setAttribute('ariaèhidden', 'true');
+    modal.removeAttribute('aria-modal');
+    modal.removeEventListener('click', closeModale);
+    modal.querySelector('.modale-supprimer-btn').addEventListener('click', closeModale)
+    // modal.querySelector('.Stop-modale').removeEventListener('click', stopPropagation)
+    modal = null;
+    
+}
+// arréter la propagation
+const stopPropagation = function(e) {
+    e.stopPropagation()
+};
+document.querySelectorAll('.open-modal1').forEach(a =>{
+    a.addEventListener('click', Openmodale)
+});
+ 
+// disparaite la barre de Filtre
+
+// const stopFlitre = document.querySelector("#Filtre");
+// stopFlitre.innerHTML = ''
+// fonction appelée pour faire apparaitre les projets dans la modale
+async function workModal(){
+    const response = await fetch("http://localhost:5678/api/works");
+    const res = await response.json();
+
+    res.forEach(works => {
+        divProjet = document.querySelector(".galerie-photo");
+        const figureElement = document.createElement("figure");
+        figureElement.classList.add("figure-modale");
+        figureElement.setAttribute("id", "" + works.id);
+        const imageElement = document.createElement("img");
+        imageElement.src = works.imageUrl;
+        imageElement.setAttribute("crossorigin", 'anonymous');
+        const figcaptionElement = document.createElement("figcaption");
+        figcaptionElement.innerText = 'editer';
+
+        const deletbutton = document.createElement("button");
+        
+        deletbutton.setAttribute("id", works.id);
+    
+        deletbutton.setAttribute("onclick", "deletProjet(this.id)");
+        deletbutton.classList.add("bouton-delete");
+        // const Iconedelete = document.querySelector(".icone-trash");
+        // const 
+        
+
+        divProjet.appendChild(figureElement);
+        figureElement.appendChild(imageElement);
+        figureElement.appendChild(figcaptionElement);
+       
+
+
+    })
+};
+workModal();
 
 
 
