@@ -275,8 +275,8 @@ async function deleteWork(e) {
         method: 'DELETE',
         Headers:{
             "content-type":"application/json",
-            "authorization": `bearer ${token}`,
-        },
+            "authorization": `bearer ${token}`
+        }
     })
 }
 
