@@ -404,78 +404,263 @@ footer nav ul {
 }
 
 .modal {
-    width: 100%;
+	width: 100%;
 	background: rgba(0, 0, 0, 0.45);
 	border-radius: 10px;
-	position:fixed;
+	position: fixed;
 	height: 100%;
 	top: 0;
 	left: 0;
-	 display: flex;
-	 justify-content: center;
-	 align-items: center;
+	display: flex;
+	justify-content: center;
+	align-items: center;
 }
-	
-.modal-wrapper{
+
+.modal-wrapper {
 	width: 630px;
 	height: 730px;
 	border-radius: 10px;
-	background-color:white;
+	background-color: white;
 	position: relative;
-    max-width: 630px;
-    max-height: 730px;
-    margin: auto; 
+	max-width: 630px;
+	max-height: 730px;
+	margin: auto;
 }
-#titlemodale{
+
+#titlemodale {
 	color: black;
-	font-weight: 400; 
+	font-weight: 400;
 	margin-left: 30%;
 }
+
 .X-close {
 	display: flex;
-	justify-content:flex-end ;
+	justify-content: flex-end;
 	margin-right: 20px;
 	margin-top: 20px;
-	/* position: absolute;
-	top: 32px;
-	right: 36px;
-	cursor: pointer;
-	font-weight: 700;
-	font-size: 18px;
-	 */
+
 }
-.bouttons-modale{
+
+.bouttons-modale {
 	display: flex;
 	flex-direction: column;
 	align-items: center;
 }
+
 .galerie-photo {
-	
-		margin: 0 105px;
-		
-		aspect-ratio: 422/436;
-		display: grid;
-		grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
-		grid-column-gap: 6px;
-		grid-row-gap: 12px;
-	  }
-    
+
+	margin: 0 105px;
+
+	aspect-ratio: 422/436;
+	display: grid;
+	grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+	grid-column-gap: 6px;
+	grid-row-gap: 12px;
+}
+
 
 .modale-ajout-btn {
 	font-family: 'Syne';
 	color: white;
 	background-color: #1D6154;
-	border:1px solid #1D6154;
+	border: 1px solid #1D6154;
 	margin-bottom: 10px;
 	width: 180px;
 	border-radius: 60px;
 	cursor: pointer;
 	padding: 5px 3px 5px 3px;
 }
+
 .modale-supprimer-btn {
 	color: #B1663C;
 }
+
 .galerie-photo img {
 	width: 100%;
 }
 
+.galerie-photo figure {
+	position: relative;
+}
+
+.bouton-delete {
+	position: absolute;
+	display: flex;
+	gap: 3px;
+	right: 5px;
+	top: 5px;
+	padding: 3px;
+	border-radius: 3px;
+	margin-top: 5px;
+
+	color: white;
+	background-color: black;
+	cursor: pointer;
+
+}
+
+
+
+
+
+/* .bouton-delete:hover {
+  background-color: black;
+} */
+.fa-trash-can {
+	color: white;
+}
+
+.move-icone {
+	position: relative;
+	display: flex;
+	opacity: 1;
+	right: 0;
+	top: 0;
+	padding: 3px;
+}
+
+.fa-arrows-up-down-left-right {
+	display: none;
+}
+
+.bouton-delete:hover .fa-arrows-up-down-left-right {
+	display: block;
+}
+
+/*MODALE2  */
+.Icons-modale2 {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.icons-retour {
+	margin-top: 30px;
+	margin-left: 20px;
+}
+
+.Icone-X {
+	margin-right: 20px;
+	margin-top: 30px;
+
+}
+
+.titeAjout {
+	color: #000000;
+	margin-left: 35%;
+	font-weight: 400;
+	font-family: 'work Sans';
+	font-size: 26px;
+	Font-style: Regular;
+	text-align: center;
+	margin-top: 30px;
+}
+
+.Icone-image {
+	width: auto;
+	min-width: 90px;
+	margin-bottom: 30px;
+	color: #B9C5CC;
+	margin-left: 30px;
+}
+
+.fa-2xl {
+	font-size: 3em;
+}
+
+.add-picture {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
+	margin-left: 15%;
+	width: 420px;
+	height: 169px;
+	border-radius: 3px;
+	background-color: #E8F1F6;
+
+}
+
+.add-picture label {
+	padding: 10px 33px;
+	font-style: medium;
+	height: 16px;
+	font-weight: 500;
+	font-size: 14px;
+	border: 10px 10px 10px 10px;
+	color: #306685;
+	font-family: 'work Sans';
+	text-align: center;
+	background-color: #CBD6DC;
+	border-radius: 50px;
+	cursor: pointer;
+}
+
+.add-picture input {
+	width: 0;
+	height: 0;
+	overflow: hidden;
+}
+
+.add-picture p {
+	font-family: 'work Sans';
+	font-size: 10px;
+
+	color: #444444;
+	margin-top: 20px;
+}
+
+#add-picture-form {
+
+
+	justify-content: center;
+	margin-top: 5px;
+	display: flex;
+	flex-direction: column;
+	width: 420px;
+	margin-left: 15%;
+}
+
+#add-picture-form input {
+	height: 51px;
+	font-size: 1.2em;
+	border: none;
+	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
+}
+
+#add-picture-form label {
+	margin: 2em 0 1em 0;
+}
+
+.selectCategory {
+	height: 51px;
+	font-size: 1.2em;
+	border: none;
+	box-shadow: 0px 4px 14px rgba(109, 89, 89, 0.09);
+}
+
+.bouton-valider {
+	font-family: 'Syne';
+	color: white;
+	background-color: #A7A7A7;
+	border: 1px solid #A7A7A7;
+	margin-bottom: 10px;
+	margin-top: 50px;
+	margin-left: 30%;
+	width: 180px;
+	border-radius: 60px;
+	cursor: pointer;
+	padding: 5px 3px 5px 3px;
+
+}
+.modal-wrapper2 {
+	width: 630px;
+	height: 730px;
+	border-radius: 10px;
+	background-color: white;
+	position: relative;
+	max-width: 630px;
+	max-height: 730px;
+	margin: auto;
+	top: 100px;
+}

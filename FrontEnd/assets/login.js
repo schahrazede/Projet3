@@ -37,19 +37,21 @@ formulUser.addEventListener("submit", function (event) {
        //si user pas trouvé
        if(response.status === 404 || response.status === 401) {
            document.getElementById("error-msg").style.display = 'block'
-           document.getElementById("error-msg").innerText = "Votre email/mot de passe n'est bon"
+           document.getElementById("error-msg").innerText = "Votre email/mot de passe n'est pas bon"
            event.target.querySelector("[name=password]").value = ''
+           return null
        }
    })
    .then(function(data) {
-       //si login/mdp OK
-       document.getElementById("error-msg").style.display = 'none'
-       document.getElementById("error-msg").innerText = ""
 
-       localStorage.setItem('token', data.token)
-       window.location.href = "index.html";
+        if(data != null) {
+            //si login/mdp OK
+            document.getElementById("error-msg").style.display = 'none'
+            document.getElementById("error-msg").innerText = ""
+
+            localStorage.setItem('token', data.token)
+            window.location.href = "index.html";
+        }
    })
   
 })
-
-
