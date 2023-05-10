@@ -30,6 +30,7 @@ const worksDisplay = async () => {
     for (let i = 0; i < works.length; i++) {
 
         const worksElement = document.createElement("figure");
+        worksElement.setAttribute('id', 'figure_projet' + works[i].id) 
         const imageElement = document.createElement("img");
         imageElement.src = works[i].imageUrl;
 
@@ -215,9 +216,13 @@ async function workModal() {
 
         const deletbutton = document.createElement("button");
         deletbutton.setAttribute("id", works.id);
-        deletbutton.setAttribute("click_id", "projets(this.id)");
+        
+        //deletbutton.setAttribute("onclick", "deleteWork("+works.id+")");
+        deletbutton.dataset.id = works.id;
         deletbutton.classList.add("bouton-delete");
         const iconeTrash = document.createElement("i")
+        iconeTrash.dataset.id = works.id;
+
         iconeTrash.classList.add("fa-solid")
         iconeTrash.classList.add("fa-trash-can")
         const moveIcone = document.createElement("i")
@@ -230,7 +235,10 @@ async function workModal() {
         figureElement.appendChild(figcaptionElement);
         figureElement.appendChild(deletbutton);
 
-
+        deletbutton.addEventListener("click", (e) => {
+            e.preventDefault();
+            deleteWork(e);
+        })
     })
 };
 workModal();
@@ -264,23 +272,26 @@ workModal();
 
 //document.querySelector(".figure-modale[id=5]")
 // suppression d'un travail
-const iconeTrash = document.querySelector("figure-modale");
-iconeTrash.addEventListener("click", (e) => {
-    e.preventDefault();
-    deleteWork(e);
-});
+
 async function deleteWork(e) {
-    let ID = iconeTrash.dataset.id;
-    fetch(`http://localhost:5678/api/works/${ID}`, {
-        method: 'DELETE',
-        Headers:{
+    // console.log(event.target)
+    let id = e.target.dataset.id; 
+    // console.log(id);
+    
+    fetch(`http://localhost:5678/api/works/${id}`, {
+        method: 'DELETE',        
+        headers: {
             "content-type":"application/json",
             "authorization": `bearer ${token}`
         }
     })
+    .then(function(response) {
+        if(response.ok) {
+            document.getElementById('projet'+id).remove();
+            document.getElementById('figure_projet'+id).remove();
+        }
+    });
 }
-
-
 // Ouverture second modale
 let modal2 = null;
 const Openmodale2 = function (e) {
@@ -314,8 +325,6 @@ const stopPropagation1 = function (e) {
 document.querySelectorAll(".open-modal2").forEach(a => {
     a.addEventListener('click', Openmodale2)
 })
-
-
 // 3.3 Ajout un work
 
 
