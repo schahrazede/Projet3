@@ -1,6 +1,6 @@
 document.getElementById("error-msg").style.display = 'none'
 
-// export function ajoutListenerConnecter() {
+
 const formulUser = document.querySelector("#LogIn-form");
 formulUser.addEventListener("submit", function (event) {
    event.preventDefault();
@@ -13,7 +13,7 @@ formulUser.addEventListener("submit", function (event) {
    /* Il faut verifier que l'email et le mot de passe ne sont pas vide */
    if(email === '' || password === '') {
        document.getElementById("error-msg").style.display = 'block'
-       document.getElementById("error-msg").innerText = 'Compléter les champs !!!!'
+       document.getElementById("error-msg").innerText = 'Complétez les champs !!!!'
        return
    }
 

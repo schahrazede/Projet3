@@ -30,7 +30,7 @@ const worksDisplay = async () => {
     for (let i = 0; i < works.length; i++) {
 
         const worksElement = document.createElement("figure");
-        worksElement.setAttribute('id', 'figure_projet' + works[i].id) 
+        worksElement.setAttribute('id', 'figure_projet' + works[i].id)
         const imageElement = document.createElement("img");
         imageElement.src = works[i].imageUrl;
 
@@ -167,13 +167,10 @@ const Openmodale = function (e) {
     modal.style.display = null;
     modal.setAttribute("aria_hiddden", "false");
     modal.setAttribute('aria-modal', 'true');
-    // const fermer = document.querySelector(".X-close")
+  
     modal.addEventListener('click', closeModale);
     modal.querySelector(".X-close").addEventListener('click', closeModale);
     modal.querySelector(".Stop-propa").addEventListener("click", stopPropagation);
-
-
-    // modal.querySelector(".Stop-modale").addEventListener('click', stopPropagation)
 
 };
 // POUR FERMER LA MODALE
@@ -216,7 +213,7 @@ async function workModal() {
 
         const deletbutton = document.createElement("button");
         deletbutton.setAttribute("id", works.id);
-        
+
         //deletbutton.setAttribute("onclick", "deleteWork("+works.id+")");
         deletbutton.dataset.id = works.id;
         deletbutton.classList.add("bouton-delete");
@@ -270,27 +267,27 @@ workModal();
  * 
  */
 
-//document.querySelector(".figure-modale[id=5]")
+
 // suppression d'un travail
 
 async function deleteWork(e) {
     // console.log(event.target)
-    let id = e.target.dataset.id; 
+    let id = e.target.dataset.id;
     // console.log(id);
-    
+
     fetch(`http://localhost:5678/api/works/${id}`, {
-        method: 'DELETE',        
+        method: 'DELETE',
         headers: {
-            "content-type":"application/json",
+            "content-type": "application/json",
             "authorization": `bearer ${token}`
         }
     })
-    .then(function(response) {
-        if(response.ok) {
-            document.getElementById('projet'+id).remove();
-            document.getElementById('figure_projet'+id).remove();
-        }
-    });
+        .then(function (response) {
+            if (response.ok) {
+                document.getElementById('projet' + id).remove();
+                document.getElementById('figure_projet' + id).remove();
+            }
+        });
 }
 // Ouverture second modale
 let modal2 = null;
@@ -302,6 +299,7 @@ const Openmodale2 = function (e) {
     modal2.setAttribute('aria-modal', 'true');
     modal2.addEventListener('click', closeModale);
     modal2.querySelector(".Icone-X").addEventListener('click', closeModale2);
+    modal2.querySelector(".icons-retour").addEventListener('click', affichageModal1);
     modal2.querySelector(".Stop-propa").addEventListener("click", stopPropagation1);
 };
 // Fermeture de second modale
@@ -318,17 +316,117 @@ const closeModale2 = function (e) {
     modal2 = null;
 
 }
+
 // arréter la propagation
 const stopPropagation1 = function (e) {
     e.stopPropagation()
 };
 document.querySelectorAll(".open-modal2").forEach(a => {
     a.addEventListener('click', Openmodale2)
+
 })
-// 3.3 Ajout un work
+// affichage de modal2 et caché modal1
+function affichageModal2() {
+    if (Openmodale2) {
+        const secondModal = document.querySelector(".modal-wrapper");
+        secondModal.style.display = 'none';
+    } else {
+        
+        console.log("erreur");
+    }
+}
+document.querySelectorAll(".open-modal2").forEach(a => {
+    a.addEventListener('click', affichageModal2)
+
+})
+// Afficher modal1 et caché modal2
+const goBack = document.querySelector(".icons-retour");
+function affichageModal1() {
+    if (goBack) {
+        const secondModal = document.querySelector("#modal2");
+        secondModal.style.display = 'none';
+           const secondModal2 = document.querySelector(".modal-wrapper");
+           secondModal2.style.display = 'block';
+        // window.location.href = 'index.html'
+
+    } else {
+        console.log("erreur");
+    }
+}
+document.getElementById("error-msg").style.display = 'none';
+
+// // 3.3 Ajout un work
+const ajouterphoto = document.querySelector('.ajout-photo');
+const intputFile = document.querySelector("#file-upload");
+const previewImg = document.querySelector(".add-picture");
+ajouterphoto.addEventListener("click", function () {
+    intputFile.click();
+})
+intputFile.addEventListener("change", function () {
+    const file = this.files[0]
+    console.log(file);
+    if (file.size < 4000000) {
+        const reader = new FileReader();
+        reader.onload = () => {
+            // const deleteImg = previewImg.querySelectorAll('img');
+            // deleteImg.forEach(item=> item.remove());
+            const imageUrl = reader.result;
+            const img = document.createElement('img');
+            img.src = imageUrl;
+            previewImg.appendChild(img);
+            previewImg.classList.add('active');
+            previewImg.dataset.img = file.name;
+        }
+        reader.readAsDataURL(file);
+    } else {
+        alert('image size more then 4mo');
+    }
+
+});
+
+//  soumission du formulaire
 
 
+const form = document.getElementById('add-picture-form');
+form.addEventListener("submit", function (event) {
+    event.preventDefault();
+    // récupération des valeurs du formulaire
+    const title = document.getElementById("title").value;
+    const category = document.getElementById("category").value;
+    const file = document.getElementById("file-upload").files[0];
+    // validation des données du formulaire
+    if (!title || !category || !file) {
+        document.getElementById("error-msg").style.display = 'block';
+        document.getElementById("error-msg").innerText = 'Complétez les champs !!!!'
+        return
+    }
+    // création de lobjet FormData pour lenvoi du formulaire
+    const formData = new FormData();
+    formData.append('title', title);
+    formData.append('category', category);
+    formData.append('imageUrl', file);
 
+    // envoi de la requéte pour lajout d'une photo
+    fetch(`http://localhost:5678/api/works/`, {
+        method: 'POST',
+        body: formData,
+        headers: {
+            "authorization": `bearer ${token}`
+
+        }
+
+    })
+        .then(response => response.json())
+        .then(data => {
+            console.log(data);
+            // réinitialisation du formulaire et la prevew d'img
+        })
+
+    document.getElementById("error-msg").style.display = 'block';
+    document.getElementById("error-msg").innerText = 'erreur dajout une photo !!!!'
+   
+
+});
 
 
 

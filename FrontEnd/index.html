@@ -64,7 +64,7 @@
 
 					<div class="X-close">
 					<i class="fa-solid fa-xmark icone"></i>
-				</div>
+				     </div>
 					<h2 id="titlemodale">Galerie photo</h2>
 					<div class="galerie-photo">
 					</div>
@@ -75,7 +75,7 @@
 						<i class="fa-solid "></i>
 					</div>
 					<div class="bouttons-modale">
-						<button class="modale-ajout-btn js-modal"><a href="#modal2" class="open-modal2">Ajouter une photo</a> </button>
+						<button class="modale-ajout-btn js-modal"><a href="#modal2" class="open-modal2 ">Ajouter une photo</a> </button>
 						<a href="#" class="modale-supprimer-btn"> Supprimer la galerie</a>
 					</div>
 				</div>
@@ -87,19 +87,21 @@
 				<aside id="modal2" class="modal" aria-hidden="true" role="dialog" aria-labelledby="titlemodal2"
 					style="display: none;">
 					<div class="modal-wrapper2 Stop-propa">
+						<p id="error-msg"></p>
 						<div class="Icons-modale2">
 							<a class="icons-retour" href="#"><i class="fa-solid fa-arrow-left"></i></a>
 							<a class="Icone-X" href="#"><i class="fa-solid fa-xmark icone"></i></a>
 						</div>
 						<h2 id="titlemodal2" class="titeAjout">Ajout photo</h2>
-						<div class="add-picture">
+						<div class="add-picture" data-img="" id="change-img">
 							<div class="Icone-image"><i class="fa-solid fa-image fa-2xl"></i></div>
 							<form>
-								<label for="file-upload">
+								<input type="file" id="file-upload"   accept="images/"
+									style="display: none;" required>
+								<label for="file-upload" class="ajout-photo">
 									+ Ajouter photo
 								</label>
-								<input type="file" id="file-upload" name="images" accept="images/"
-									style="display: none;" required>
+								
 							</form>
 							<p>jng,png :4mo max</p>
 						</div>
