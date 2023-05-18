@@ -1,9 +1,8 @@
 
 //boolean true/false 
-
-
 document.getElementById('li_logout').style.display = 'none'
-
+//  1.1 Récupération des travaux depuis le back-end
+// Appel à l’API avec fetch afin de récupérer dynamiquement les projets de l’architecte
 let works = [];
 const fetchWork = async (affiche) => {
     console.log("fetch")
@@ -21,6 +20,8 @@ const fetchWork = async (affiche) => {
 
 };
 
+// ajouter à la galerie les travaux  qu'on a récupéré.
+
 const worksDisplay = async () => {
 
     const divGallery = document.querySelector(".gallery");
@@ -33,7 +34,6 @@ const worksDisplay = async () => {
         worksElement.setAttribute('id', 'figure_projet' + works[i].id)
         const imageElement = document.createElement("img");
         imageElement.src = works[i].imageUrl;
-
         divGallery.appendChild(worksElement);
         worksElement.appendChild(imageElement);
         const caption = document.createElement("figcaption");
@@ -48,19 +48,8 @@ const worksDisplay = async () => {
 
 fetchWork(true);
 
-
-let categories = [];
-const fethcategory = async () => {
-    await fetch("http://localhost:5678/api/categories")
-        .then((res) => res.json())
-        .then((Promise) => {
-            categories = Promise;
-            //console.log(categories);
-
-        });
-};
-fethcategory();
-
+//  1.2 : Réalisation du filtre des travaux
+// Au clic sur un élément du menu de catégories, filtrer les travaux selon le filtre sélectionné.
 
 const ObjetsFiltree = document.querySelector("#objet");
 ObjetsFiltree.addEventListener("click", function () {
@@ -108,36 +97,10 @@ TousFiltree.addEventListener("click", function () {
     fetchWork(true)
 });
 
-
-
-
-/**
- * ETAPE 2 Formulaire de login
- * 
- * 1. Créer la page HTML/CSS (Attention, pensez aux responsive)
- * 2. Ajouter un eventListener sur le bouton "se connecter" au click
- *    A. Verifier que les 2 champs du formulaire ne sont pas vide
- *      b. si les champs sont vides, afficher un message d'erreur
- *  
- *    B. si les champs sont OK, envoyer une requete POST vers /api/users/login avec fetch()
- *          avec les données du formulaires
- * 
- *    C. Si authentification OK (HTTP 200)
- *         a. on récupère le token dans la reponse
- *         b. ON sauvegarde le token
- *          c. On redirige l'utilisateur vers la page d'accueil
- *         d. sur la page d'accueil, si l'utilisateur est connecté, alors il faut afficher logout dans le header
- *              a la palce de login
- *          e. si click sur logout, on supprime le token (on deconnecte l'utilisateur)
- * 
- *      D. Si authentification NOK (HTTP 401 ou 404)
- *          a. afficher un message d'erreur
- * 
- */
-
+// Les changement en cas de connecté ou non connecter sur la page index.html
 let token = localStorage.getItem('token')
 if (token !== null) {
-
+    //MODE CONNECTE
     document.getElementById('li_logout').style.display = 'block'
     document.getElementById('li_login').style.display = 'none'
 
@@ -146,19 +109,20 @@ if (token !== null) {
     stopFlitre.style.display = 'none'
 
 
-}
-else {
-    //bouton modifier doit etre caché si pas connecté
-    document.querySelector('.titre').style.display = 'none'
-
     document.querySelector('#li_logout a').addEventListener('click', function (event) {
+        event.preventDefault()
         localStorage.removeItem('token');
         window.location.href = 'index.html'
     });
 }
+else {
+    //MODE NON CONNECTE
+    //bouton modifier doit etre caché si pas connecté
+    document.querySelector('.titre').style.display = 'none'
+}
 
 
-
+// 3.Ajout de la Modale
 // ouverture de modale
 let modal = null;
 const Openmodale = function (e) {
@@ -167,13 +131,12 @@ const Openmodale = function (e) {
     modal.style.display = null;
     modal.setAttribute("aria_hiddden", "false");
     modal.setAttribute('aria-modal', 'true');
-  
     modal.addEventListener('click', closeModale);
     modal.querySelector(".X-close").addEventListener('click', closeModale);
     modal.querySelector(".Stop-propa").addEventListener("click", stopPropagation);
 
 };
-// POUR FERMER LA MODALE
+// fermeture de modale
 const closeModale = function (e) {
     if (modal === null) return
     e.preventDefault();
@@ -195,6 +158,7 @@ document.querySelectorAll(".open-modal1").forEach(a => {
     a.addEventListener('click', Openmodale)
 })
 
+//MODALGALLERY
 // fonction appelée pour faire apparaitre les projets dans la modale
 async function workModal() {
     const response = await fetch("http://localhost:5678/api/works");
@@ -210,16 +174,12 @@ async function workModal() {
         imageElement.setAttribute("crossorigin", 'anonymous');
         const figcaptionElement = document.createElement("figcaption");
         figcaptionElement.innerText = 'editer';
-
         const deletbutton = document.createElement("button");
         deletbutton.setAttribute("id", works.id);
-
-        //deletbutton.setAttribute("onclick", "deleteWork("+works.id+")");
         deletbutton.dataset.id = works.id;
         deletbutton.classList.add("bouton-delete");
         const iconeTrash = document.createElement("i")
         iconeTrash.dataset.id = works.id;
-
         iconeTrash.classList.add("fa-solid")
         iconeTrash.classList.add("fa-trash-can")
         const moveIcone = document.createElement("i")
@@ -240,40 +200,10 @@ async function workModal() {
 };
 workModal();
 
-
-/**
- * Etape 3.2
- * Suppression d'un travail
- * 
- * 1. Positionner en CSS le bouton sur l'image (position obsolute ?) C fait
- * 2. Sur click sur bouton trash
- *      a. Envoyer une requete HTTP vers l'api DELETE /works/{id}
- *      b. Si response.ok
- *          c. supprimer le figureElement dans la modale dont l'id correspond a l'id cliqué
- *          d. supprimer le travail dans la page principale
- * 
- * 
- * Etape 3.3
- * 3. Sur click du bouton Ajouter une photo
- *  a. Masquer le contenu gallerie de la modale (display none)
- *  b. Afficher le formulaire d'ajout + la fleche retour
- * 
- *  c. sur click de la fleche retour: afficher la gallerie, masquer le formulaire
- *   d. sur validation du formulaire
- *         e. Envoyer une requete HTTP vers l'api POST /works
- *          f. si reponse.ok
- *                 g. ajouter la figure dans la gallerie de la modale
- *                  h. ajouter la figure dans la page principale
- * 
- */
-
-
 // suppression d'un travail
 
 async function deleteWork(e) {
-    // console.log(event.target)
     let id = e.target.dataset.id;
-    // console.log(id);
 
     fetch(`http://localhost:5678/api/works/${id}`, {
         method: 'DELETE',
@@ -284,12 +214,14 @@ async function deleteWork(e) {
     })
         .then(function (response) {
             if (response.ok) {
+                // supprimer le figureElement dans la gallery modale dont l'id correspond a l'id cliqué
                 document.getElementById('projet' + id).remove();
+                // supprimer le travail dans la page principale
                 document.getElementById('figure_projet' + id).remove();
             }
         });
 }
-// Ouverture second modale
+// Ouverture Modale Ajout photo
 let modal2 = null;
 const Openmodale2 = function (e) {
     e.preventDefault();
@@ -302,7 +234,7 @@ const Openmodale2 = function (e) {
     modal2.querySelector(".icons-retour").addEventListener('click', affichageModal1);
     modal2.querySelector(".Stop-propa").addEventListener("click", stopPropagation1);
 };
-// Fermeture de second modale
+// Fermeture Modale Ajout photo
 const closeModale2 = function (e) {
     if (modal === null) return
     e.preventDefault();
@@ -331,7 +263,7 @@ function affichageModal2() {
         const secondModal = document.querySelector(".modal-wrapper");
         secondModal.style.display = 'none';
     } else {
-        
+
         console.log("erreur");
     }
 }
@@ -345,9 +277,8 @@ function affichageModal1() {
     if (goBack) {
         const secondModal = document.querySelector("#modal2");
         secondModal.style.display = 'none';
-           const secondModal2 = document.querySelector(".modal-wrapper");
-           secondModal2.style.display = 'block';
-        // window.location.href = 'index.html'
+        const secondModal2 = document.querySelector(".modal-wrapper");
+        secondModal2.style.display = 'block';
 
     } else {
         console.log("erreur");
@@ -356,22 +287,22 @@ function affichageModal1() {
 document.getElementById("error-msg").style.display = 'none';
 
 // // 3.3 Ajout un work
-const ajouterphoto = document.querySelector('.ajout-photo');
+
 const intputFile = document.querySelector("#file-upload");
 const previewImg = document.querySelector(".add-picture");
-ajouterphoto.addEventListener("click", function () {
-    intputFile.click();
-})
+let img;
+//  On lui applique un listener pour changer le style d'image
 intputFile.addEventListener("change", function () {
+    console.log('intputFile change')
     const file = this.files[0]
     console.log(file);
     if (file.size < 4000000) {
-        const reader = new FileReader();
+        //  Permet de lire fichier choisi
+        const reader = new FileReader();  
         reader.onload = () => {
-            // const deleteImg = previewImg.querySelectorAll('img');
-            // deleteImg.forEach(item=> item.remove());
             const imageUrl = reader.result;
-            const img = document.createElement('img');
+            img = document.createElement('img');
+            // Récupérer la source image sur le pc
             img.src = imageUrl;
             previewImg.appendChild(img);
             previewImg.classList.add('active');
@@ -385,7 +316,6 @@ intputFile.addEventListener("change", function () {
 });
 
 //  soumission du formulaire
-
 
 const form = document.getElementById('add-picture-form');
 form.addEventListener("submit", function (event) {
@@ -404,7 +334,7 @@ form.addEventListener("submit", function (event) {
     const formData = new FormData();
     formData.append('title', title);
     formData.append('category', category);
-    formData.append('imageUrl', file);
+    formData.append('image', file);
 
     // envoi de la requéte pour lajout d'une photo
     fetch(`http://localhost:5678/api/works/`, {
@@ -419,13 +349,14 @@ form.addEventListener("submit", function (event) {
         .then(response => response.json())
         .then(data => {
             console.log(data);
-            // réinitialisation du formulaire et la prevew d'img
+            form.reset()
+            img.remove()
+            previewImg.classList.remove("active")
         })
-
-    document.getElementById("error-msg").style.display = 'block';
-    document.getElementById("error-msg").innerText = 'erreur dajout une photo !!!!'
-   
-
+        .catch(err => {
+            document.getElementById("error-msg").style.display = 'block';
+            document.getElementById("error-msg").innerText = 'Une erreur est survenu'
+        })
 });
 
 
