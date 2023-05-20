@@ -16,8 +16,6 @@ const fetchWork = async (affiche) => {
             }
 
         });
-    // on appelle la fonction pour ajouter le listener au formulaire
-
 };
 
 // ajouter à la galerie les travaux  qu'on a récupéré.
@@ -119,6 +117,7 @@ else {
     //MODE NON CONNECTE
     //bouton modifier doit etre caché si pas connecté
     document.querySelector('.titre').style.display = 'none'
+    document.querySelector('.titre1').style.display = 'none'
 }
 
 

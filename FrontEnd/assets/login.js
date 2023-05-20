@@ -36,7 +36,7 @@ formulUser.addEventListener("submit", function (event) {
             //si user pas trouvé
             if (response.status === 404 || response.status === 401) {
                 document.getElementById("error-msg").style.display = 'block'
-                document.getElementById("error-msg").innerText = "Votre email/mot de passe n'est pas bon"
+                document.getElementById("error-msg").innerText = "Erreur dans L\identifiant ou le mot de passe"
                 event.target.querySelector("[name=password]").value = ''
                 return null
             }
