@@ -1,14 +1,17 @@
 
 //boolean true/false 
 document.getElementById('li_logout').style.display = 'none'
-//  1.1 Récupération des travaux depuis le back-end
+//  1.1 Récupération des travaux 
 // Appel à l’API avec fetch afin de récupérer dynamiquement les projets de l’architecte
 let works = [];
 const fetchWork = async (affiche) => {
     console.log("fetch")
     await fetch("http://localhost:5678/api/works")
+    // La réponse de l'appel à l'API est convertie en format JSON 
         .then((reponse) => reponse.json())
+
         .then((Promise) => {
+     //  met à jour la variable works avec les projets récupérés de l'API.
             works = Promise;
 
             if (affiche) {
@@ -26,6 +29,7 @@ const worksDisplay = async () => {
     divGallery.innerHTML = ''
 
     console.log("affiche " + works.length)
+    // parcourt les travaux récupérés pour créer des éléments HTML
     for (let i = 0; i < works.length; i++) {
 
         const worksElement = document.createElement("figure");
@@ -47,19 +51,20 @@ const worksDisplay = async () => {
 fetchWork(true);
 
 //  1.2 : Réalisation du filtre des travaux
-// Au clic sur un élément du menu de catégories, filtrer les travaux selon le filtre sélectionné.
+// 4 blocs d'écouteurs d'événements 
 
 const ObjetsFiltree = document.querySelector("#objet");
 ObjetsFiltree.addEventListener("click", function () {
 
     fetchWork(false)
+    // créer un nouveau tableau qui contient uniquement les projets category=objet
     const workFiltre = works.filter(function (work) {
         return work.category.name === 'Objets'
     });
     console.log(workFiltre);
-
+//  mettre à jour le tableau "works" avec le contenu "workFiltre".
     works = workFiltre
-
+// pour mettre à jour l'affichage des projets dans la galerie.
     worksDisplay()
 });
 
@@ -290,7 +295,7 @@ document.getElementById("error-msg").style.display = 'none';
 const intputFile = document.querySelector("#file-upload");
 const previewImg = document.querySelector(".add-picture");
 let img;
-//  On lui applique un listener pour changer le style d'image
+//  On lui applique un listener pour détecter le changement de valeur
 intputFile.addEventListener("change", function () {
     console.log('intputFile change')
     const file = this.files[0]
@@ -348,6 +353,7 @@ form.addEventListener("submit", function (event) {
         .then(response => response.json())
         .then(data => {
             console.log(data);
+            //  rénitialisation de formulaire 
             form.reset()
             img.remove()
             previewImg.classList.remove("active")

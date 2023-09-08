@@ -3,13 +3,15 @@ document.getElementById("error-msg").style.display = 'none'
 
 const formulUser = document.querySelector("#LogIn-form");
 formulUser.addEventListener("submit", function (event) {
+//   l'événement par défaut est empêché d'être exécuté (la page ne recharge pas)
     event.preventDefault();
+    
     // creation de lobjet de connexion charge utile
 
     let email = event.target.querySelector("[name=email]").value
     let password = event.target.querySelector("[name=password]").value
 
-    /* Il faut verifier que l'email et le mot de passe ne sont pas vide */
+    /* Il faut verifier que les champs l'email et le mot de passe ne sont pas vide */
     if (email === '' || password === '') {
         document.getElementById("error-msg").style.display = 'block'
         document.getElementById("error-msg").innerText = 'Complétez les champs !!!!'
@@ -21,7 +23,7 @@ formulUser.addEventListener("submit", function (event) {
         password: password,
     };
 
-    // Appel de la fonction fetch avec toutes les information necessaire
+    // Appel de l'API pour l'authentification avec toutes les information necessaire
     fetch("http://localhost:5678/api/users/login", {
         method: "POST",
         headers: { "content-Type": "application/json" },
@@ -29,7 +31,9 @@ formulUser.addEventListener("submit", function (event) {
 
     })
         .then(function (response) {
+        //   Traitement de la réponse de l'API 
             if (response.ok) {
+                
                 return response.json();
             }
 
